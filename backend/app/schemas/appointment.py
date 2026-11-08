@@ -1,8 +1,7 @@
-from datetime import date, datetime, time 
+from datetime import date, datetime, time
 
-from pydantic import BaseModel, Field,model_validator
 from enum import Enum
-# from pydantic import BaseModel
+from pydantic import BaseModel, Field, model_validator
 
 
 class AppointmentStatus(str, Enum):
@@ -12,9 +11,6 @@ class AppointmentStatus(str, Enum):
     CANCELLED = "CANCELLED"
     NO_SHOW = "NO_SHOW"
 
-
-class AppointmentStatusUpdate(BaseModel):
-    status: AppointmentStatus
 
 class AppointmentCreate(BaseModel):
     availability_id: int
@@ -58,7 +54,6 @@ class AppointmentResponse(BaseModel):
     }
 
 
-
 class AppointmentStatusUpdate(BaseModel):
     appointment_date: date | None = None
     start_time: time | None = None
@@ -66,18 +61,3 @@ class AppointmentStatusUpdate(BaseModel):
     status: AppointmentStatus | None = None
     reason: str | None = None
     notes: str | None = None
-
-
-
-
-class AppointmentStatus(str, Enum):
-    BOOKED = "BOOKED"
-    CONFIRMED = "CONFIRMED"
-    COMPLETED = "COMPLETED"
-    CANCELLED = "CANCELLED"
-    NO_SHOW = "NO_SHOW"
-
-
-
-class AppointmentStatusUpdate(BaseModel):
-    status: AppointmentResponse

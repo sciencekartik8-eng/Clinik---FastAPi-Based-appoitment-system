@@ -8,7 +8,12 @@ from app.models.appointment import Appointment
 from app.models.availability import Availability
 from app.models.doctor import Doctor
 from app.models.user import User
-from app.schemas.appointment import AppointmentCreate, AppointmentResponse, AppointmentStatusUpdate
+from app.schemas.appointment import (
+    AppointmentCreate,
+    AppointmentResponse,
+    AppointmentStatus,
+    AppointmentStatusUpdate,
+)
 # from app.models.appointment import Appointment
 from app.models.patient import Patient
 
@@ -100,7 +105,7 @@ def create_appointment(
     appointment_date=appointment_data.appointment_date,
     start_time=appointment_data.start_time,
     end_time=appointment_data.end_time,
-    status="Booked"
+    status=AppointmentStatus.BOOKED.value
     )
 
 
@@ -195,7 +200,7 @@ def cancel_appointment(
             detail="You are not authorized to cancel this appointment"
         )
 
-    appointment.status = "Cancelled"
+    appointment.status = AppointmentStatus.CANCELLED.value
     db.commit()
     db.refresh(appointment)
     return appointment
@@ -287,4 +292,3 @@ def update_appointment_Status(
             detail="Failed to update appointment status due to a database integrity error"
         )
     return appointment
-
