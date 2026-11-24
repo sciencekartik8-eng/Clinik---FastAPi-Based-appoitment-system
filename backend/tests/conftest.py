@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -16,11 +18,18 @@ from app.models.availability import Availability
 from app.models.appointment import Appointment
 
 
-TEST_DATABASE_URL = "sqlite:///./test_clinic.db"
+TEST_DATABASE_URL = os.getenv(
+    "TEST_DATABASE_URL",
+    "sqlite:///./test_clinic.db",
+)
 
 engine = create_engine(
     TEST_DATABASE_URL,
-    connect_args={"check_same_thread": False},
+    connect_args=(
+        {"check_same_thread": False}
+        if TEST_DATABASE_URL.startswith("sqlite")
+        else {}
+    ),
 )
 
 TestingSessionLocal = sessionmaker(
