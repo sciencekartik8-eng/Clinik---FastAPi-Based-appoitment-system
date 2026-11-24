@@ -1,26 +1,19 @@
-from fastapi.testclient import TestClient
-from  app.main import app
+from app.main import app
 
 
-client = TestClient(app)
-
-def test_get_appointments_without_authentication():
+def test_get_appointments_without_authentication(client):
     response = client.get("/appointments/my")
 
-    assert response.status_code in [401, 403]  # Depending on your authentication setupJ
+    assert response.status_code in [401, 403]
 
-def test_patient_can_access_own_appointments(
-    authenticated_patient_client,
-):
-    response = authenticated_patient_client.get(
-        "/appointments/my"
-    )
+
+def test_patient_can_access_own_appointments(authenticated_patient_client):
+    response = authenticated_patient_client.get("/appointments/my")
 
     assert response.status_code == 200
     assert response.json() == []
 
 
-# ```python
 def test_patient_can_book_appointment(
     authenticated_patient_client,
     doctor_and_availability,
@@ -54,10 +47,7 @@ def test_patient_cannot_book_overlapping_appointment(
         "end_time": "10:30:00",
     }
 
-    first = authenticated_patient_client.post(
-        "/appointments",
-        json=payload,
-    )
+    first = authenticated_patient_client.post("/appointments", json=payload)
     assert first.status_code == 201
 
     second = authenticated_patient_client.post(
