@@ -41,5 +41,5 @@ jobs:
         run: pytest -v
 
       - name: Build Docker image
-        run: docker build -t clinic-api:ci .
+        run: docker build -f Dockerfile -t clinic-api:ci .
 
